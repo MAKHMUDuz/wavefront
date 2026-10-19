@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wavefront</title>
+    <meta name="description" content="Real-time 2D Schrödinger equation simulation in WebGPU." />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <main class="stage" id="stage">
+        <div class="viewport" id="viewport">
+          <canvas id="sim"></canvas>
+          <canvas id="overlay"></canvas>
+          <div class="hud">
+            <span><b>t</b> <span id="stat-time">0</span></span>
+            <span><b>Σ|ψ|²</b> <span id="stat-norm">100%</span></span>
+            <span id="stat-paused" hidden>paused</span>
+          </div>
+        </div>
+      </main>
+
+      <aside class="panel">
+        <section>
+          <h2>Scene</h2>
+          <div class="scenes" id="scenes"></div>
+          <p class="blurb" id="blurb"></p>
+        </section>
+
+        <section>
+          <h2>Tool</h2>
+          <div class="segmented" id="tools">
+            <button data-tool="fire" title="Drag to fire a particle (1)">Fire</button>
+            <button data-tool="wall" title="Paint walls (2)">Wall</button>
+            <button data-tool="erase" title="Erase walls (3)">Erase</button>
+          </div>
+          <p class="hint" id="tool-hint"></p>
+        </section>
+
+        <section class="actions">
+          <button id="btn-play" title="Space">Pause</button>
+          <button id="btn-reset" title="R">Reset</button>
+          <button id="btn-measure" title="M">Measure</button>
+          <button id="btn-clear" title="C">Clear walls</button>
+        </section>
+
+        <section>
+          <h2>Settings</h2>
+          <label class="slider">
+            <span>Speed <output id="out-speed"></output></span>
+            <input id="in-speed" type="range" min="1" max="16" step="1" value="6" />
+          </label>
+          <label class="slider">
+            <span>Brightness <output id="out-exposure"></output></span>
+            <input id="in-exposure" type="range" min="-2" max="3" step="0.05" value="0" />
+          </label>
+          <label class="slider">
+            <span>Particle size <output id="out-sigma"></output></span>
+            <input id="in-sigma" type="range" min="6" max="40" step="1" value="14" />
+          </label>
+          <label class="slider">
+            <span>Brush size <output id="out-brush"></output></span>
+            <input id="in-brush" type="range" min="2" max="30" step="1" value="6" />
+          </label>
+          <div class="row">
+            <span>Color</span>
+            <div class="segmented small" id="color-mode">
+              <button data-mode="phase" title="Hue shows the phase of ψ (P)">Phase</button>
+              <button data-mode="probability" title="Heat map of |ψ|² (P)">Probability</button>
+            </div>
+          </div>
+          <label class="row toggle">
+            <span>Absorbing edges</span>
+            <input id="in-absorb" type="checkbox" />
+          </label>
+        </section>
+
+        <details class="about">
+          <summary>How it works</summary>
+          <p>
+            The wavefunction ψ lives on a 512 × 512 grid on the GPU. Every step applies the
+            <em>split-step Fourier method</em>: rotate the phase by the potential, FFT into momentum space,
+            rotate the phase by the kinetic energy, FFT back, and rotate by the potential again.
+            Each piece is an exact phase rotation, so probability is conserved and the method never blows up.
+          </p>
+          <p>
+            Brightness is the probability density |ψ|². In <b>Phase</b> mode the hue shows the complex phase
+            of ψ, which is where the wave crests and interference fringes come from.
+            <b>Measure</b> samples a position from |ψ|² and collapses the wavefunction there.
+          </p>
+        </details>
+
+        <footer class="keys">
+          <span><kbd>Space</kbd> pause</span>
+          <span><kbd>R</kbd> reset</span>
+          <span><kbd>M</kbd> measure</span>
+          <span><kbd>C</kbd> clear</span>
+          <span><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> tools</span>
+          <span><kbd>P</kbd> color</span>
+          <span><kbd>S</kbd> screenshot</span>
+          <span><kbd>⇧</kbd>+fire superpose</span>
+        </footer>
+      </aside>
+    </div>
+
+    <div class="unsupported" id="unsupported" hidden>
+      <div>
+        <h2>WebGPU isn't available</h2>
+        <p id="unsupported-reason">Wavefront needs a browser with WebGPU: a recent Chrome or Edge, Safari 26+, or a recent Firefox.</p>
+      </div>
+    </div>
+
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>
