@@ -1,10 +1,8 @@
 # Wavefront
 
-A 2D quantum mechanics sandbox in the browser. It solves the time-dependent Schrödinger equation on a 512×512 grid in real time using WebGPU compute shaders.
+A 2D quantum mechanics sandbox in the browser, solves the time-dependent Schrödinger equation on a 512×512 grid in real time using WebGPU compute shaders.
 
 ![Double-slit interference](docs/double-slit.png)
-
-You can fire wave packets at slits, barriers and obstacles, draw your own walls, and measure the particle's position.
 
 Scenes: double slit, single slit, tunneling, harmonic trap, stadium billiard, scattering, crystal lattice, empty sandbox.
 
@@ -56,7 +54,7 @@ Scenes are defined in `src/presets.ts` as a potential plus an initial Gaussian p
 
 ## Running
 
-Requires Node 22+ and a browser with WebGPU (recent Chrome or Edge, Safari 26+, recent Firefox).
+Requires Node 22+ and a browser with WebGPU
 
 ```bash
 npm install
