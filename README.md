@@ -2,6 +2,8 @@
 
 A 2D quantum mechanics sandbox in the browser, solves the time-dependent Schrödinger equation on a 512×512 grid in real time using WebGPU compute shaders.
 
+**[Try it in your browser](https://ylfeid.github.io/wavefront/)** (needs WebGPU)
+
 ![Double-slit interference](docs/double-slit.png)
 
 Scenes: double slit, single slit, tunneling, harmonic trap, stadium billiard, scattering, crystal lattice, empty sandbox.
